@@ -1,7 +1,9 @@
 from playwright.sync_api import sync_playwright
 import pandas as pd
+import time
 import os
 from dotenv import load_dotenv
+
 
 
 load_dotenv()
@@ -23,7 +25,12 @@ class EmissorNFE:
    
 
     def captcha(self):
-        pass
+        #page.locator('#LOGIN_MPAGE')
+        print("Preencha o Captcha para prosseguirmos...")
+        #Usado o wait_for_selector, para que a automação continue apenas quando um dos seletores da proxima
+        #etápa apareça.
+        self.page.wait_for_selector("#LOGIN_MPAGE")
+
 
 if __name__ == "__main__":
     bot = EmissorNFE()
@@ -31,3 +38,4 @@ if __name__ == "__main__":
     cpf = os.getenv("CPF")
     senha = os.getenv("SENHA")
     bot.Login(usuario=cpf, senha=senha)
+    bot.captcha()
