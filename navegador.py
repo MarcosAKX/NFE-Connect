@@ -21,7 +21,7 @@ class EmissorNFE:
         self.page.locator("a:has-text('Login')").click()
         self.page.fill('#W0045vUSUARIO',usuario)
         self.page.fill('#W0045vSENHA', senha)
-        self.page.wait_for_timeout(3000)
+
    
 
     def captcha(self):
@@ -31,6 +31,28 @@ class EmissorNFE:
         #etápa apareça.
         self.page.wait_for_selector("#LOGIN_MPAGE")
 
+    def consulta_nfe(self):
+        self.page.locator('#IMGEMPRESA_MPAGE').click()
+        #O lugar onde precisamos clicar possui um iframe, 
+        iframe = self.page.frame_locator("#gxp0_ifrm")
+        iframe.locator("#vIMAGESTATUS_0001").click()
+        self.page.locator("a:has-text('NFE')").click()
+        self.page.locator("a:has-text('Emissão / Consulta de NFS-e')").click()
+
+    def cadastrar_sn(self):
+        self.page.locator("#INCLUIR").click()
+        #Select_option, usado para campos dropdown que são aqueles que precisamos clicar para expandir escolhas.
+        self.page.select_option("#vCONTHSTFTREGAPTRIBSN", value="1")
+        self.page.locator("#BTNALTERARFAT").click()
+
+
+    def fechar(self):
+        self.page.wait_for_timeout(30000)  # espera 3 segundos
+        self.browser.close()
+        self.playwright.stop()
+
+
+
 
 if __name__ == "__main__":
     bot = EmissorNFE()
@@ -39,3 +61,7 @@ if __name__ == "__main__":
     senha = os.getenv("SENHA")
     bot.Login(usuario=cpf, senha=senha)
     bot.captcha()
+    bot.consulta_nfe()
+    bot.cadastrar_sn()
+    bot.fechar()
+
